@@ -1,0 +1,18 @@
+{
+  "programs": [
+    {
+      "id": "websynth",
+      "type": "main",
+      "wasmPath": "./wasm/websynth.wasm",
+      "jsLink": "./wasm/websynth.js",
+      "status": "run"
+    },
+    {
+      "id": "zigdb",
+      "type": "main",
+      "wasmPath": "./wasm/zigdb.wasm",
+      "jsLink": "./wasm/zigdb.js",
+      "status": "load"
+    }
+  ]
+}

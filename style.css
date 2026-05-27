@@ -107,6 +107,14 @@ Key:
     border: 1px solid purple;
 }
 
+.element {
+    border: 1px dotted green;
+}
+
+.elementExpanded {
+
+}
+
 
 
 @media (orientation: portrait) {

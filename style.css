@@ -74,6 +74,7 @@ Key:
     justify-content: center;
     text-align: center;
     border: 1px solid purple;
+    pointer-events: none;
 }
 
 .headerBar {
@@ -115,6 +116,11 @@ Key:
 
 }
 
+.element__wasm canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+}
 
 
 @media (orientation: portrait) {

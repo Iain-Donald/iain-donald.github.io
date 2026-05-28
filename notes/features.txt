@@ -1,0 +1,10 @@
+*** 
+*** Features.txt
+*** Notepad for the status of features.
+
+
+/// Display
+
+// Color and compression
+
+ - Chroma subsampling.

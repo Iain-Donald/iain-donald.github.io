@@ -8,10 +8,10 @@ class Element {
         this.data = new Map(Object.entries(data));
     }
 
-    getProperty(property){
-        if (this.data.has(property))
-            return this.data.get(property);
-        return stateLog.commitStatus({level: "WARN", message: "Element.getProperty: Property not found."});
+    getProperty(property) {
+        if (this.data.has(property)) return this.data.get(property);
+        stateLog.commitStatus({ level: "WARN", message: "Element.getProperty: Property not found." });
+        return null;
     }
 }
 
@@ -64,10 +64,46 @@ function displayElements(targetSelector, data) {
             <p class="element__lang">${el.getProperty('lang')}</p>
             <p class="element__subtitle">${el.getProperty('subTitle')}</p>
             <p class="element__desc">${el.getProperty('description')}</p>
+            <div class="element__wasm" id="wasm_${programID}"></div>
         `;
         col.appendChild(node);
+
+        if (prog) initProgram(prog, programID);
     }
 }
 
+// elementState — uppercase values
+const elementState = {
+    current: null,
+
+    setRun(id) {
+        this.current = id;
+    },
+
+    getStatus(id) {
+        return this.current === id ? 'RUN' : 'LOAD';
+    }
+};
+
+// initProgram — match uppercase and jsLink
+async function initProgram(prog, programID) {
+    const status = elementState.getStatus(programID);
+
+    if (status === 'RUN') {
+        const { init } = await import(new URL(prog.jsLink, window.location.origin).href);
+        await init(`#wasm_${programID}`, prog.wasmPath);
+        stateLog.commitStatus({ level: "INFO", message: `initProgram: running ${programID}` })
+    } else if (status === 'LOAD') {
+        // const module = await WebAssembly.compileStreaming(fetch(prog.wasmPath));
+        // moduleCache.set(programID, module);
+        stateLog.commitStatus({ level: "INFO", message: `initProgram: preloaded ${programID}` });
+    }
+}
+
+// Seed elementState.current from JSON on load
 const data = await loadElements();
+
+const initialRun = data?.programs.find(p => p.state === 'RUN');
+if (initialRun) elementState.setRun(initialRun.id);
+
 displayElements('.elementColumn', data);

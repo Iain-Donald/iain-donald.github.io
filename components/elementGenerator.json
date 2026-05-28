@@ -15,6 +15,14 @@
       "subTitle": "Description",
       "description": "<Brief on ACID compliance and the workings of the DB>. Visualize the database live including index layers, hash function diagrams, and selected and pointer cache.",
       "programID": "zigdb"
+    },
+    {
+        "id": "3",
+        "title": "Framebuffer Test",
+        "lang": "C via WASM",
+        "subTitle": "Basic framebuffer demo.",
+        "description": "Testing the framebuffer pipeline.",
+        "mainProgramID": "testing"
     }
   ]
 }

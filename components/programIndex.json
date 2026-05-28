@@ -1,18 +1,25 @@
 {
   "programs": [
     {
+      "id": "testing",
+      "type": "main",
+      "wasmPath": "./wasm/testing.wasm",
+      "jsLink": "/wasm/framebuffer.js",
+      "state": "RUN"
+    },
+    {
       "id": "websynth",
       "type": "main",
       "wasmPath": "./wasm/websynth.wasm",
-      "jsLink": "./wasm/websynth.js",
-      "status": "run"
+      "jsLink": "/wasm/framebuffer.js",
+      "state": "LOAD"
     },
     {
       "id": "zigdb",
       "type": "main",
       "wasmPath": "./wasm/zigdb.wasm",
-      "jsLink": "./wasm/zigdb.js",
-      "status": "load"
+      "jsLink": "/wasm/zigdb.js",
+      "state": "LOAD"
     }
   ]
 }

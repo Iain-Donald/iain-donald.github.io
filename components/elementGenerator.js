@@ -3,6 +3,8 @@ import { StateBranch } from "./utils.js";
 // Start exception logger
 const stateLog = new StateBranch("Create StateBranch", "INFO");
 
+const cancelFunctions = new Map();
+
 class Element {
     constructor(data) {
         this.data = new Map(Object.entries(data));
@@ -47,6 +49,7 @@ function displayElements(targetSelector, data) {
         return;
     }
 
+    // build elements column and create click listener.
     for (const item of elements) {
         const el = new Element(item);
         const programID = el.getProperty('mainProgramID') ?? el.getProperty('programID') ?? null;
@@ -68,11 +71,18 @@ function displayElements(targetSelector, data) {
         `;
         col.appendChild(node);
 
+        node.classList.add(elementState.getStatus(programID) === 'RUN' ? 'elementExpanded' : 'elementCollapsed');
+
+        node.addEventListener('click', () => {
+            if (node.classList.contains('elementCollapsed'))
+                transitionRun(programID, data);
+        });
+
         if (prog) initProgram(prog, programID);
     }
 }
 
-// elementState — uppercase values
+// elementState
 const elementState = {
     current: null,
 
@@ -85,14 +95,38 @@ const elementState = {
     }
 };
 
-// initProgram — match uppercase and jsLink
+// Handle starting and stopping element WASM programs.
+function transitionRun(newID, data) {
+    const prevID = elementState.current;
+    elementState.setRun(newID);
+
+    document.querySelectorAll('.element').forEach(el => {
+        const isActive = el.dataset.programId === newID;
+        el.classList.toggle('elementExpanded',  isActive);
+        el.classList.toggle('elementCollapsed', !isActive);
+    });
+
+    cancelFunctions.get(prevID)?.();
+    cancelFunctions.delete(prevID);
+
+    // Clear old WASM container and re-init new one
+    if (prevID) {
+        const old = document.querySelector(`#wasm_${prevID}`);
+        if (old) old.innerHTML = '';
+    }
+    const prog = data.programs.find(p => p.id === newID);
+    if (prog) initProgram(prog, newID);
+}
+
+// initProgram // jsLink
 async function initProgram(prog, programID) {
     const status = elementState.getStatus(programID);
 
     if (status === 'RUN') {
         const { init } = await import(new URL(prog.jsLink, window.location.origin).href);
-        await init(`#wasm_${programID}`, prog.wasmPath);
-        stateLog.commitStatus({ level: "INFO", message: `initProgram: running ${programID}` })
+        const cancel = await init(`#wasm_${programID}`, prog.wasmPath);
+        cancelFunctions.set(programID, cancel);
+        stateLog.commitStatus({ level: "INFO", message: `initProgram: running ${programID}` });
     } else if (status === 'LOAD') {
         // const module = await WebAssembly.compileStreaming(fetch(prog.wasmPath));
         // moduleCache.set(programID, module);

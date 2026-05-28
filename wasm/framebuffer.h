@@ -1,6 +1,4 @@
 #pragma once
-#ifndef FRAMEBUFFER_H
-#define FRAMEBUFFER_H
 
 #include <stdint.h>
 
@@ -16,6 +14,7 @@
 #define BLUE   0xFFFF0000
 
 // state
+static uint32_t fbPrev[FB_MAX_PIXELS]; // Stores previous frame to avoid full redraw. Pending complete implementation.
 static uint32_t fb[FB_MAX_PIXELS];
 static int fb_w    = 640;
 static int fb_h    = 480;
@@ -58,5 +57,3 @@ static void rect(int x, int y, int w, int h, uint32_t color) {
 
 EXPORT void render_frame();
 EXPORT void on_click();
-
-#endif

@@ -1,0 +1,9 @@
+***
+***
+***
+
+/// Notes
+
+// Unsorted
+
+- Heavily throttle browser tab with Performance/Environment setting/CPU: 20x slowdown. Add custom 40x+ slowdown to perceive inefficiencies. 

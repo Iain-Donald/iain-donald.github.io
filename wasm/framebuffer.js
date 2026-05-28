@@ -28,7 +28,9 @@ export async function init(containerSelector, wasmPath) {
     canvas.addEventListener('mouseleave', () => exp.set_mouse(-1, -1));
     canvas.addEventListener('click',      () => exp.on_click?.());
 
+    let running = true; // Ability to stop looping if not active in DOM.
     function loop() {
+        if (!running) return;
         syncSize();  // no-op if unchanged, catches set_size() calls from C
         exp.render_frame();
         const raw = new Uint8ClampedArray(exp.memory.buffer, exp.get_fb(), canvas.width * canvas.height * 4);
@@ -36,4 +38,5 @@ export async function init(containerSelector, wasmPath) {
         requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
+    return () => { running = false; };
 }

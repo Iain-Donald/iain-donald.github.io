@@ -18,6 +18,8 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center; 
+  background-color: black;
+  color: wheat;
 }
 
 /*
@@ -112,8 +114,24 @@ Key:
     border: 1px dotted green;
 }
 
-.elementExpanded {
+.elementColumn {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
 
+.elementExpanded {
+    flex: 1;
+    overflow: hidden;
+}
+
+.elementCollapsed {
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.elementCollapsed .element__wasm {
+    display: none;
 }
 
 .element__wasm canvas {

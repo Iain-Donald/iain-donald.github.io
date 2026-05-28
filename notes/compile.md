@@ -1,4 +1,4 @@
-## quickstart
+## Quickstart
 
 ### C program template
 
@@ -8,22 +8,22 @@
 
 WASM_EXPORT void render_frame() {
     fb_clear(FB_BLACK);
-    // drawing code here
+    // fun area
     fb_draw_cursor(10);
 }
 ```
 
 ### Compile wasm
 
-`zig cc ./wasm/yourprogram.c -I./wasm -target wasm32-freestanding -nostdlib "-Wl,--no-entry" "-Wl,--export-dynamic" -O2 -o ./wasm/yourprogram.wasm`
+`zig cc ./wasm/program.c -I./wasm -target wasm32-freestanding -nostdlib "-Wl,--no-entry" "-Wl,--export-dynamic" -O2 -o ./wasm/program.wasm`
 
 ### Add entry to elementGenerator.json
 
 ```json
 {
-    "id": "yourprogram",
+    "id": "program",
     "type": "main",
-    "wasmPath": "./wasm/yourprogram.wasm",
+    "wasmPath": "./wasm/program.wasm",
     "jsLink": "/wasm/framebuffer.js",
     "state": "RUN"
 }
@@ -34,7 +34,7 @@ WASM_EXPORT void render_frame() {
 
 ### Development
 
-Simply recompile the C module and reload with `ctrl+shift+r`. No need to restart the server.
+Recompile the C module and reload with `ctrl+shift+r`. No need to restart the server.
 
 ### Further info
 
